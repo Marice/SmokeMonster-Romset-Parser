@@ -1,10 +1,8 @@
-# SmokeMonster Romset Parser
-Use this tool to parse your rom collection, check for completeness, and copy to into a tidy folder structure.
+# SmokeMonster Romset Parser - by Marice
+This is a Unofficial port of the python script hosted here:
+https://github.com/SmokeMonsterPacks/EverDrive-Packs-Lists-Database
 
-* All possible switch buttons mapped to 1-15 
-* Exit to HBmenu using PLUS
-
-- See: https://github.com/SmokeMonsterPacks/EverDrive-Packs-Lists-Database
+Use this tool to parse your rom collection, check for completeness, and copy into a tidy folder structure.
 
 [REQUIREMENTS]
 * Microsoft .Net Framework

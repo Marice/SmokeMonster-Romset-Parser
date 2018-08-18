@@ -9,7 +9,7 @@ namespace SmokeMonster_Romset_Parser
     class Rom
     {
         private string filename;
-        private string targetpath;
+        private string addline;
         private string checksum;
         private bool shaalreadymatched;
 
@@ -25,12 +25,11 @@ namespace SmokeMonster_Romset_Parser
             set { checksum = value; }
         }
 
-        public string Targetpath
+        public string Addline
         {
-            get { return targetpath; }
-            set { targetpath = value; }
+            get { return addline; }
+            set { addline = value; }
         }
-
 
         public bool ShaAlreadyMatched
         {

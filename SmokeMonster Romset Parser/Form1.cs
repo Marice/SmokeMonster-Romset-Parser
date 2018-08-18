@@ -20,14 +20,11 @@ namespace SmokeMonster_Romset_Parser
         private const int HTCLIENT = 0x1;
         private const int HTCAPTION = 0x2;
 
-        bool hasInputFolderSet = false;
-        bool hasOutputFolderSet = false;
+        //common vars
         bool hasSMDBfileSet = false;
         List<Rom> romList = new List<Rom>();
         int sha256MatchesFound = 0;
         int files_copied = 0;
-
-
 
         public Form1()
         {
@@ -36,7 +33,6 @@ namespace SmokeMonster_Romset_Parser
             progressBar1.Hide();
             ParseButton.Hide();
         }
-
 
         //drag drop window
         protected override void WndProc(ref Message m)
@@ -71,16 +67,6 @@ namespace SmokeMonster_Romset_Parser
             }         
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pictureBox2_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog folderDlg = new FolderBrowserDialog();
@@ -92,7 +78,6 @@ namespace SmokeMonster_Romset_Parser
                 textBox1.Text = folderDlg.SelectedPath;
                 Environment.SpecialFolder root = folderDlg.RootFolder;
             }
-            hasInputFolderSet = true;
             ShowParseButton();
         }
 
@@ -107,14 +92,12 @@ namespace SmokeMonster_Romset_Parser
                 textBox2.Text = folderDlg.SelectedPath;
                 Environment.SpecialFolder root = folderDlg.RootFolder;
             }
-            hasOutputFolderSet = true;
             ShowParseButton();
         }
 
         public void ShowParseButton()
         {
-            if (textBox1.Text != "" && textBox2.Text != "" && textBox3.Text != "" &&
-                (radioButton1.Checked || radioButton2.Checked))
+            if (textBox1.Text != "" && textBox2.Text != "" && textBox3.Text != "" )
             {
                 ParseButton.Show();
             }
@@ -146,8 +129,6 @@ namespace SmokeMonster_Romset_Parser
             textBox2.Enabled = false;
             textBox3.Enabled = false;
             ParseButton.Enabled = false;
-            radioButton1.AutoCheck = false;
-            radioButton2.AutoCheck = false;
             button1.Enabled = false;
             button2.Enabled = false;
             button4.Enabled = false;
@@ -167,7 +148,7 @@ namespace SmokeMonster_Romset_Parser
                 {
                     currentRom.FileName = delimitedByTab2[1];
                     currentRom.Checksum = delimitedByTab2[0];
-
+                    currentRom.Addline = line;
                     romList.Add(currentRom);
                 }
 
@@ -192,7 +173,6 @@ namespace SmokeMonster_Romset_Parser
             }
         }
 
-
         // Compute the file's hash.
         private byte[] GetHashSha256(string filename)
         {
@@ -202,16 +182,6 @@ namespace SmokeMonster_Romset_Parser
             {
                 return Sha256.ComputeHash(stream);
             }
-        }
-
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
-        {
-            ShowParseButton();
-        }
-
-        private void radioButton2_CheckedChanged(object sender, EventArgs e)
-        {
-            ShowParseButton();
         }
 
         private void BackgroundWorker1_DoWork_1(object sender, DoWorkEventArgs e)
@@ -264,7 +234,6 @@ namespace SmokeMonster_Romset_Parser
                 }
             }
 
-            int missingCount = 0;
             List<Rom> romListMissing = new List<Rom>();
 
             //afterwards we ask the user to compile a missing files txt
@@ -287,13 +256,23 @@ namespace SmokeMonster_Romset_Parser
                     //afterwards we ask the user to compile a missing files txt
                     foreach (Rom rommissing in romListMissing)
                     {
-                        Pri.LongPath.File.AppendAllText(textBox2.Text + "\\" + "missing.txt", rommissing.Checksum + "\t" + rommissing.FileName + Environment.NewLine);
+                        Pri.LongPath.File.AppendAllText(textBox2.Text + "\\" + "missing.txt", rommissing.Addline);
                     }
                 }
                 else if (dialogResultmissing == DialogResult.No)
                 {
                     //nothing for now
                 }
+            }
+
+            MessageBox.Show("We are done! \nPress 'Ok' to exit the program.");
+            if (System.Windows.Forms.Application.MessageLoop)
+            {
+                System.Windows.Forms.Application.Exit();
+            }
+            else
+            {
+                System.Environment.Exit(1);
             }
         }
 
@@ -322,20 +301,5 @@ namespace SmokeMonster_Romset_Parser
             shaMatchesFoundLabel.Refresh();
             Application.DoEvents();
         }
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void progressBar1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
-        {
-
-        }
     }
-
 }
